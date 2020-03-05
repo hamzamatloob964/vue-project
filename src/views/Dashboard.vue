@@ -49,7 +49,6 @@
 </template>
 
 <script>
-//import router from '../router';
 import {mapActions} from 'vuex';
   export default {
     props: {
@@ -83,9 +82,9 @@ import {mapActions} from 'vuex';
     }
   }
 </script>
-<style scoped>
+<style scopped>
 html{
-  overflow-y: hidden;
+  overflow-y: hidden !important;
 }
 .v-application .indigo{
   /* background-color:	 #fa9c04 !important; */

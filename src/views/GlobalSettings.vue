@@ -3,45 +3,32 @@
     <div class="toolbar pa-5">
       <Breadcrumb class="breadcrumb"/>
     </div>
-    <div class="tenant-account pl-5 pr-5">
-      <v-switch v-model="tenanatAccount" color="indigo" class="switch mx-2" 
-        label="Allow or disable new tenant account setup">
-      </v-switch>
-      <v-btn
-        color="green white--text"
-        class="payment-btn"
-        @click.stop="dialog3 = true"
-        @click="disableTenantAccountFunc"
-      >
-        payment Gateway 
-      </v-btn>
-      <v-dialog v-model="dialog3"  transition="dialog-bottom-transition" width="40%">
-        <v-card>
-          <v-toolbar color="#0082ca">
-            <v-toolbar-title ><h4 style="color:white;"> Global Payment Gateway</h4></v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <br>
-            <div>
-              <v-switch v-model="slip" color="indigo" class="mx-2" 
-              label="Bank slip upload" @click="paymentGatewaySlipFunc">
-              </v-switch>
-              <v-switch v-model="bills" color="indigo" class="mx-2" 
-              label="Bills" @click="paymentGatewayBillsFunc" >
-              </v-switch>
-              <v-switch v-model="stripe" color="indigo" class="mx-2" 
-              label="Stripe" @click="paymentGatewayStripeFunc">
-              </v-switch>
-            </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="#0082ca" @click.native="dialog3 = false" class="white--text">
-              close</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <div class="select">
+    <div class="div-content">
+      <div class="tenant-account pl-5 pr-5">
+        <h3>Disable Account </h3>
+        <v-switch v-model="tenanatAccount" color="indigo"
+          label="Disable tenant account setup">
+        </v-switch>
+        <v-switch v-model="ownerAccount" color="indigo"
+          label="Disable owner account setup">
+        </v-switch>
+      </div>
+      <div class="payment-gateway pl-5 pr-5">
+        <h3>Payment Gateway </h3>
+        <v-switch v-model="slip" color="indigo" class="mx-2" 
+        label="Bank slip upload" @click="paymentGatewaySlipFunc">
+        </v-switch>
+        <v-switch v-model="bills" color="indigo" class="mx-2" 
+        label="Bills" @click="paymentGatewayBillsFunc" >
+        </v-switch>
+        <v-switch v-model="stripe" color="indigo" class="mx-2" 
+        label="Stripe" @click="paymentGatewayStripeFunc">
+        </v-switch>
+      </div>
+      <div class="country pl-5 pr-5 ">
+        <h3>Select Country </h3>
         <v-select
+        class="select"
         color="blue"
         outlined
         v-model="country"
@@ -50,67 +37,60 @@
         >
         </v-select>
       </div>
-    </div>
-    <div class="add-bank pl-5 pr-5">
-      <template >
-        <v-toolbar flat color="white">
-          <v-toolbar-title>Banks by Country</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on">Add Bank</v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col>
-                      <v-text-field v-model="editedItem.name" label="Bank name"></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-toolbar>
-      </template>
-    </div>
-    <div class="country-banks pl-5 pr-5">
-      <v-data-table
-        :headers="headers"
-        :items="banks"
-        sort-by="calories"
-        class="elevation-1"
-      >
-        <template v-slot:item.action="{ item }">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(item)"
-          >
-            mdi-pencil
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(item)"
-          >
-            mdi-delete
-          </v-icon>
+      <div class="add-bank pl-5 pr-5">
+        <template >
+          <v-toolbar flat color="white">
+            <v-toolbar-title>Banks by Country</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark @click="addBank">
+              Add Bank</v-btn>
+            <v-dialog v-model="dialog" max-width="500px">
+              <v-card>
+                <v-card-title>
+                  <span v-if="showText" class="headline blue--text">Delete Bank</span>
+                  <span v-if="showInput" class="headline blue--text">Add Bank</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col>
+                        <v-text-field v-if="showInput" v-model="editedItem.name" label="Bank name"></v-text-field>
+                        <v-label v-if="showText"><span>Are you sure to delete this bank ?</span></v-label>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click.native="dialog = false">Cancel</v-btn>
+                  <v-btn v-if="showText" color="blue darken-1" text @click="deleteSelectedItem">yes</v-btn>
+                  <v-btn v-if="showInput" color="blue darken-1" text @click="save">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-toolbar>
         </template>
-        <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
-        </template>
-      </v-data-table>
+      </div>
+      <div class="country-banks pl-5 pr-5">
+        <v-data-table
+          :headers="headers"
+          :items="banks"
+          sort-by="calories"
+          class="elevation-1"
+        >
+          <template v-slot:item.action="{ item }">
+            <v-icon
+              small
+              @click="deleteItem (item)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <template v-slot:no-data>
+            <v-btn color="primary" @click="initialize">Reset</v-btn>
+          </template>
+        </v-data-table>
+      </div>
     </div>
   </div>
 </template>
@@ -127,14 +107,19 @@ export default {
   data () {
     return {
       banks:[],
+      showInput: false,
+      showText: false,
       slip: false,
       bills: false,
       stripe: false,
-      select:'',
+      bank:'',
       country:'',
+      selectedItem: '',
       tenanatAccount: false,
-      items: ['asdad','adasda','asdasda'],
+      ownerAccount: false,
+      items: ["asdad","adasda","asdasda"],
       dialog: false,
+      dialog2: false,
       dialog3: false,
       headers: [
         {
@@ -152,6 +137,204 @@ export default {
       defaultItem: {
         name: '',
       },
+      countriesList: [
+        "Afghanistan",
+        "Albania",
+        "Algeria",
+        "Andorra",
+        "Angola",
+        "Antigua & Deps",
+        "Argentina",
+        "Armenia",
+        "Australia",
+        "Austria",
+        "Azerbaijan",
+        "Bahamas",
+        "Bahrain",
+        "Bangladesh",
+        "Barbados",
+        "Belarus",
+        "Belgium",
+        "Belize",
+        "Benin",
+        "Bhutan",
+        "Bolivia",
+        "Bosnia Herzegovina",
+        "Botswana",
+        "Brazil",
+        "Brunei",
+        "Bulgaria",
+        "Burkina",
+        "Burundi",
+        "Cambodia",
+        "Cameroon",
+        "Canada",
+        "Cape Verde",
+        "Central African Rep",
+        "Chad",
+        "Chile",
+        "China",
+        "Colombia",
+        "Comoros",
+        "Congo",
+        "Congo {Democratic Rep}",
+        "Costa Rica",
+        "Croatia",
+        "Cuba",
+        "Cyprus",
+        "Czech Republic",
+        "Denmark",
+        "Djibouti",
+        "Dominica",
+        "Dominican Republic",
+        "East Timor",
+        "Ecuador",
+        "Egypt",
+        "El Salvador",
+        "Equatorial Guinea",
+        "Eritrea",
+        "Estonia",
+        "Ethiopia",
+        "Fiji",
+        "Finland",
+        "France",
+        "Gabon",
+        "Gambia",
+        "Georgia",
+        "Germany",
+        "Ghana",
+        "Greece",
+        "Grenada",
+        "Guatemala",
+        "Guinea",
+        "Guinea-Bissau",
+        "Guyana",
+        "Haiti",
+        "Honduras",
+        "Hungary",
+        "Iceland",
+        "India",
+        "Indonesia",
+        "Iran",
+        "Iraq",
+        "Ireland {Republic}",
+        "Israel",
+        "Italy",
+        "Ivory Coast",
+        "Jamaica",
+        "Japan",
+        "Jordan",
+        "Kazakhstan",
+        "Kenya",
+        "Kiribati",
+        "Korea North",
+        "Korea South",
+        "Kosovo",
+        "Kuwait",
+        "Kyrgyzstan",
+        "Laos",
+        "Latvia",
+        "Lebanon",
+        "Lesotho",
+        "Liberia",
+        "Libya",
+        "Liechtenstein",
+        "Lithuania",
+        "Luxembourg",
+        "Macedonia",
+        "Madagascar",
+        "Malawi",
+        "Malaysia",
+        "Maldives",
+        "Mali",
+        "Malta",
+        "Marshall Islands",
+        "Mauritania",
+        "Mauritius",
+        "Mexico",
+        "Micronesia",
+        "Moldova",
+        "Monaco",
+        "Mongolia",
+        "Montenegro",
+        "Morocco",
+        "Mozambique",
+        "Myanmar, {Burma}",
+        "Namibia",
+        "Nauru",
+        "Nepal",
+        "Netherlands",
+        "New Zealand",
+        "Nicaragua",
+        "Niger",
+        "Nigeria",
+        "Norway",
+        "Oman",
+        "Pakistan",
+        "Palau",
+        "Panama",
+        "Papua New Guinea",
+        "Paraguay",
+        "Peru",
+        "Philippines",
+        "Poland",
+        "Portugal",
+        "Qatar",
+        "Romania",
+        "Russian Federation",
+        "Rwanda",
+        "St Kitts & Nevis",
+        "St Lucia",
+        "Saint Vincent & the Grenadines",
+        "Samoa",
+        "San Marino",
+        "Sao Tome & Principe",
+        "Saudi Arabia",
+        "Senegal",
+        "Serbia",
+        "Seychelles",
+        "Sierra Leone",
+        "Singapore",
+        "Slovakia",
+        "Slovenia",
+        "Solomon Islands",
+        "Somalia",
+        "South Africa",
+        "South Sudan",
+        "Spain",
+        "Sri Lanka",
+        "Sudan",
+        "Suriname",
+        "Swaziland",
+        "Sweden",
+        "Switzerland",
+        "Syria",
+        "Taiwan",
+        "Tajikistan",
+        "Tanzania",
+        "Thailand",
+        "Togo",
+        "Tonga",
+        "Trinidad & Tobago",
+        "Tunisia",
+        "Turkey",
+        "Turkmenistan",
+        "Tuvalu",
+        "Uganda",
+        "Ukraine",
+        "United Arab Emirates",
+        "United Kingdom",
+        "United States",
+        "Uruguay",
+        "Uzbekistan",
+        "Vanuatu",
+        "Vatican City",
+        "Venezuela",
+        "Vietnam",
+        "Yemen",
+        "Zambia",
+        "Zimbabwe"
+      ],
     }
   },
   methods: {
@@ -177,10 +360,9 @@ export default {
       this.disableTenantAccount();
     },
     addBank () {
-      console.log('called');
-      console.log(this.select);
-      this.items.push(this.select);
-      console.log("add func called!",this.select)
+      this.showText = false
+      this.dialog = true
+      this.showInput = true
     },
     initialize () {
       this.banks = [
@@ -202,15 +384,26 @@ export default {
       ]
     },
 
-    editItem (item) {
-      this.editedIndex = this.banks.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
+    // editItem (item) {
+    //   this.showText = false
+    //   this.showInput = true
+    //   this.editedIndex = this.banks.indexOf(item)
+    //   this.editedItem = Object.assign({}, item)
+    //   this.dialog = true
+    // },
 
     deleteItem (item) {
-      const index = this.banks.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.banks.splice(index, 1)
+      this.showInput = false
+      this.showText = true
+      this.dialog = true;
+      this.selectedItem = item;
+      //console.log(item);
+    },
+
+    deleteSelectedItem () {
+      const index = this.banks.indexOf(this.selectedItem)
+      this.banks.splice(index, 1);
+      this.dialog = false;
     },
 
     close () {
@@ -222,17 +415,16 @@ export default {
     },
 
     save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.banks[this.editedIndex], this.editedItem)
-      } else {
-        this.banks.push(this.editedItem)
-      }
+      this.banks.push(this.editedItem)
+      // if (this.editedIndex > -1) {
+      //   Object.assign(this.banks[this.editedIndex], this.editedItem)
+      // } else {
+      // }
       this.close()
-    },
+    }
   },
   computed: {
     ...mapState([
-      'countriesList',
       'banksList'
     ]),
     formTitle () {
@@ -245,44 +437,66 @@ export default {
     },
   },
   created () {
-    console.log("this is created !!!!!!")
     this.initialize()
+  },
+  mounted () {
   }
 }
 </script>
 
 <style scoped>
-.main{
+.div-content{
+  height: 443px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+/* .main{
   display: flex;
   flex-direction: column;
   height: 425px;
-}
-.payment{
+} */
+/* .payment{
   background-color: red;
   height: 60px;
   display: flex;
-}
+} */
 .add-bank{
 }
 .tenant-account{
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+}
+.payment-gateway{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.country{
+  display: flex;
+  flex-direction: column;
 }
 .add-btn{
   height: 50px;
   width: 80px;
 }
 .select{
-  width: 320px;
-  margin-left: auto;
+  margin-top: 5px;
+  /* margin-left: 30px; */
+  /* align-self:center; */
+  /* width: 520px; */
 }
 .country-banks{
-  height: 290px;
+  /* height: 108px; */
   width: 100%;
-  overflow-y: scroll;
+  margin-bottom: 10px;
+  /* overflow-y: scroll; */
 }
 .payment-btn{
-  margin-top: 13px;
-  margin-left: 5px;margin-bottom: 5px;
+  margin-left: 30px;
 }
+/* .switch{
+  margin-top: 0px;
+  margin-left: 30px;
+} */
 </style>

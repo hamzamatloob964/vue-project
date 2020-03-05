@@ -1,112 +1,54 @@
 <template>
-  <v-app id="inspire">
-    <v-content>
-      <v-form
-        ref="form"
+  <div class="loginPage justify-center">
+    <v-card class="elevation-12">
+      <!-- <v-toolbar
+        color="#0082ca"
+        dark
+        flat
+        class="d-flex justify-center"
       >
-        <v-container
-          class="fill-height"
-          fluid
-        >
-          <v-row
-            align="center"
-            justify="center"
-          >
-            <v-col
-              cols="12"
-              sm="8"
-              md="4"
-            >
-              <v-card class=" otp-card elevation-12">
-                <v-toolbar
-                  color="#0082ca"
-                  dark
-                  flat
-                  class="d-flex justify-center"
-                >
-                  <v-toolbar-title >Verify OTP code</v-toolbar-title>
-                  <v-spacer />
+        <v-spacer />
 
-                </v-toolbar>
-                <v-card-text class="otp">
-
-                  <v-text-field
-                    id="userId"
-                    v-model="user.otp1"
-                    type="text"
-                    outlined
-                    class="field"
-                  />
-                  <v-div v-if="submitted && $v.user.otp1.$error" >
-                      <span style="color:red;" v-if="!$v.user.otp1.required">
-                        userID is required</span><br>
-                      <span style="color:red;" v-if="!$v.user.otp1.maxLength">
-                      This field should only contain 1 character.</span>
-                  </v-div>
-
-                  <v-text-field
-                    id="userId"
-                    v-model="user.otp2"
-                    type="text"
-                    class="field"
-                    outlined
-                  />
-                  <v-div v-if="submitted && $v.user.otp2.$error" >
-                      <span style="color:red;" v-if="!$v.user.otp2.required">
-                        userID is required</span><br>
-                      <span style="color:red;" v-if="!$v.user.otp2.maxLength">
-                      This field should only contain 1 character.</span>
-                  </v-div>
-
-                  <v-text-field
-                    id="userId"
-                    v-model="user.otp3"
-                    class="field"
-                    type="text"
-                    outlined
-                  />
-                  <v-div v-if="submitted && $v.user.otp3.$error" >
-                      <span style="color:red;" v-if="!$v.user.otp3.required">
-                        userID is required</span><br>
-                      <span style="color:red;" v-if="!$v.user.otp3.maxLength">
-                      This field should only contain 1 character.</span>
-                  </v-div>
-
-                  <v-text-field
-                    id="userId"
-                    class="field"
-                    v-model="user.otp4"
-                    type="text"
-                    outlined
-                    error-messages=''
-                  />
-                  <v-div v-if="submitted && $v.user.otp4.$error" >
-                      <span style="color:red;" v-if="!$v.user.otp4.required">
-                        userID is required</span><br>
-                      <span style="color:red;" v-if="!$v.user.otp4.maxLength">
-                      This field should only contain 1 character.</span>
-                  </v-div>
-
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <!-- <router-link to="/dashBoard"> -->
-                  <v-btn 
-                  color="#0082ca" 
-                  @click="logIn"
-                  id="loginBtn"
-                  class="login-btn"
-                  >Submit</v-btn>
-                  <!-- </router-link> -->
-                  <!-- <v-btn color="primary" class="ml-2">signUp</v-btn> -->
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
-    </v-content>
-  </v-app>
+      </v-toolbar> -->
+      <v-card-title class="justify-center">
+        <span class="headline blue--text">VERIFY OTP</span>
+      </v-card-title>
+      <v-divider></v-divider>
+      <v-card-text>
+        <v-otp-input
+          class="justify-center"
+          ref="otpInput"
+          input-classes="otp-input"
+          separator="-"
+          :num-inputs="6"
+          :should-auto-focus="true"
+          :is-input-num="true"
+          @on-change="handleOnChange"
+          @on-complete="handleOnComplete"
+        />
+      </v-card-text>
+      <v-card-actions class="justify-center">
+        <v-btn 
+          @click="logIn"
+          id="loginBtn"
+          width="50%"
+          class="white--text" 
+          color="blue"
+          >Submit</v-btn>
+      </v-card-actions>
+    </v-card>
+    <!-- <v-otp-input
+      ref="otpInput"
+      input-classes="otp-input"
+      separator="-"
+      :num-inputs="4"
+      :should-auto-focus="true"
+      :is-input-num="true"
+      @on-change="handleOnChange"
+      @on-complete="handleOnComplete"
+    /> -->
+    <!-- <button @click="handleClearInput()">Clear Input</button> -->
+  </div>
 </template>
 
 <script>
@@ -117,6 +59,7 @@ import {mapState} from 'vuex';
 import { required, maxLength } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
+import '../assets/App.css'
 Vue.use(Vuelidate)
   export default {
     name: 'logIn',
@@ -154,7 +97,16 @@ Vue.use(Vuelidate)
       //     alert("Email or password is incorrect !")
       //   }) 
       //   //console.log("%%%%% DATA :"+this.login.email);
-      }
+      },
+      handleOnComplete(value) {
+        console.log('OTP completed: ', value);
+      },
+      handleOnChange(value) {
+        console.log('OTP changed: ', value);
+      },
+      handleClearInput() {
+        this.$refs.otpInput.clearInput();
+      },
     },
     computed: {
       ...mapState([
@@ -164,8 +116,8 @@ Vue.use(Vuelidate)
   
   }
 </script>
-<style lang="css" scoped>
-.login-btn {
+<style lang="less">
+/* .login-btn {
   width: 100px;
   color: white;
   margin-top: 55px;
@@ -183,5 +135,23 @@ Vue.use(Vuelidate)
 }
 .otp-card {
   height: 270px;
-}
+} */
+.otp-input {
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    margin: 0 10px;
+    font-size: 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    text-align: center;
+    &.error {
+      border: 1px solid red !important;
+    }
+  }
+  .otp-input::-webkit-inner-spin-button,
+  .otp-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 </style>

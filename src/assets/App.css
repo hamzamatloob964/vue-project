@@ -1,0 +1,11 @@
+.marginLeft{
+  margin-left: auto;
+}
+.loginPage{
+  width: 500px;
+  margin: auto;
+}
+.login-btn {
+  width: 100px;
+  color: white;
+}

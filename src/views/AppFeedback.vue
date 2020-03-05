@@ -7,7 +7,29 @@
         </div>
       </template>
     </div>
-    <div class="card-main pa-5">
+    <div class="card-main pl-5 pr-5">
+      <v-data-table
+        :headers="headers"
+        :items="banks"
+        sort-by="calories"
+        class="elevation-1"
+      >
+        <template v-slot:body = {items}>
+          <tbody>
+            <tr v-for="item in items" :key="item.name" @click="selectItem(item)">
+              <td>{{ item.name }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.name }}</td>
+              <!-- <td>{{ item.age }}</td> -->
+            </tr>
+          </tbody>
+        </template>
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="initialize">Reset</v-btn>
+        </template>
+      </v-data-table>
+    </div>
+    <!-- <div class="card-main pa-5">
       <template>
         <v-card
           outlined class="card"
@@ -23,6 +45,7 @@
               tile
               size="75"
               color="grey"
+              class="mt-6"
             >
             <v-img
               src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
@@ -33,32 +56,27 @@
                 <span class='text--primary'><v-icon class="">mdi-cellphone-basic</v-icon>  
               {{item.pNumber}}</span> &mdash; {{item.msg}}
               </v-card-subtitle>
-              <!-- <v-card-subtitle class=""><v-icon class="">mdi-cellphone-basic</v-icon>  
-              01323-23123-3123</v-card-subtitle> -->
-              <!-- <v-card-text class="d-flex mb-2">"this is my feedback"</v-card-text> -->
             </v-list-item-content>
           </v-list-item>
         </v-card>
       </template>
       <v-app >
-        <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
-          <v-card>
-            <v-toolbar color="#0082ca">
-              <v-toolbar-title class="white--text" > App Feedback </v-toolbar-title>
-            </v-toolbar>
-            <v-card-text>
-              <br>
-              <v-label><span>" {{msg}} "</span></v-label>
-              
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="#0082ca" @click.native="dialog = false" 
-              class="white--text">close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-app>
-    </div>
+    </div> -->
+  <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
+    <v-card>
+      <v-card-title ><span class="headline blue--text">FEEDBACK</span></v-card-title>
+      <v-card-text>
+        <br>
+        <v-label><span>" {{msg}} "</span></v-label>
+        
+      </v-card-text>
+      <v-card-actions>
+        <v-btn class="marginLeft" color="blue darken-1" text @click.native="dialog = false">
+          close</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
   </div>
 </template>
 
@@ -66,12 +84,50 @@
 import Breadcrumb from '../components/Breadcrumb'
 import {mapActions} from 'vuex';
 import {mapState} from 'vuex';
+import '../assets/App.css'
 export default {
 name:'AppFeedback',
 data () {
   return {
-    msg: '',
+    msg: 'jvvhvhj hjbh hj h hjhjv jh bj  jhvjhvjhvjhvj jhvj ',
     dialog: false,
+    banks:[
+        {
+          name: 'Jelly bean',
+        },
+        {
+          name: 'Lollipop'
+        },
+        {
+          name: 'Honeycomb'
+        },
+        {
+          name: 'Donut',
+        },
+        {
+          name: 'KitKat'
+        },
+      ],
+      headers: [
+        {
+          text: 'Name',
+          align: 'left',
+          sortable: false,
+          value: 'action',
+        },
+        {
+          text: 'Phone no',
+          align: 'left',
+          sortable: false,
+          value: 'name',
+        },
+        {
+          text: 'Feedback',
+          align: 'left',
+          sortable: false,
+          value: 'name',
+        }
+      ],
   }
 },
 methods: {
@@ -80,10 +136,14 @@ methods: {
     ]),
   showMsg (item) {
     this.msg = item.msg;
+  },
+  selectItem(){
+    this.dialog = true;
   }
 },
 computed: {
   ...mapState([
+    'feedbackList'
     ]),
 },
 mounted () {
@@ -97,11 +157,9 @@ components: {
 
 <style scoped>
 .card-main {
-  height: 425px;
+  height: 442px;
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .card {
   margin-right: 15px;

@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class=" pa-5">
-      <template>
+      <Breadcrumb class="breadcrumb"/>
+      <!-- <template>
         <div class="toolbar">
-          <Breadcrumb class="breadcrumb"/>
         </div>
-      </template>
+      </template> -->
     </div>
     <div class="btn-div">
-      <button @click="navigateTo('ownerSettings')" type="button" class="btn1">
-        Owner Settings</button>
-      <button @click="navigateTo('globalSettings')" type="button" class="btn2">
-        Global Settings</button>
-      <button @click="navigateTo('appFeedback')" type="button" class="btn3">
-        App Feedback</button>
+      <v-btn height="80" @click="navigateTo('ownerSettings')" outlined color="blue" class="btn">
+        Owner Settings</v-btn>
+      <v-btn height="80" @click="navigateTo('globalSettings')" outlined color="green" class="btn">
+        Global Settings</v-btn>
+      <v-btn height="80" @click="navigateTo('appFeedback')" outlined color="orange" class="btn">
+        App Feedback</v-btn>
     </div>
   </div>
 </template>
@@ -38,32 +38,11 @@ export default {
 </script>
 
 <style scoped>
-.btn1 {
-  height: 100px;
-  width: 200px;
-  background-color: limegreen;
-  border-radius: 10px;
-  color: white;
-  font-size: 22px;
-  font-weight: 500;
-  margin-left: 15px;
-}
-.btn2 {
-  height: 100px;
-  width: 200px;
-  background-color: blue;
-  border-radius: 10px;
-  color: white;
-  font-size: 22px;
-  font-weight: 500;
-  margin-left: 15px;
-}
-.btn3 {
-  height: 100px;
-  width: 200px;
-  background-color: orange;
-  border-radius: 10px;
-  color: white;
+.btn {
+  /* width: 200px; */
+  /* background-color: limegreen; */
+  border-radius: 5px;
+  /* color: white; */
   font-size: 22px;
   font-weight: 500;
   margin-left: 15px;

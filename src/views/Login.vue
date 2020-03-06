@@ -83,11 +83,12 @@
 <script>
 //import router from '../router';
 import {mapActions} from 'vuex';
-import {mapState} from 'vuex';
+// import {mapState} from 'vuex';
 import { required, maxLength } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import '../assets/App.css'
+var Cookies = require('vue-cookies')
 Vue.use(Vuelidate)
   export default {
     name: 'logIn',
@@ -106,28 +107,30 @@ Vue.use(Vuelidate)
     },
     methods: {
       ...mapActions([
-        'Login'
+        'login'
       ]),
       logIn () {
         this.$v.$touch();
         if (this.$v.$invalid) {
           return;
         }
-        this.$router.push('/OTPVerify');
-        // this.Login(this.user) .then(res => {
-        //   router.push('/dashboard');
-        //   console.log(res)
-        // }).catch(err => {
-        //   console.log('ERROR OCCURED',err);
-        //   alert("Email or password is incorrect !")
-        // }) 
+        //console.log("user login data :",this.user)
+        //this.$router.push('/OTPVerify');
+        this.login(this.user) .then(() => {
+          console.log("cookies token is %%%%%%%:",Cookies.get('adminToken'))
+          this.$router.push('/OTPVerify');
+          //router.push('/dashboard');
+        }).catch(err => {
+          console.log('ERROR OCCURED',err);
+          alert("Email or password is incorrect !")
+        }) 
         //console.log("%%%%% DATA :"+this.login.email);
       }
     },
     computed: {
-      ...mapState([
-        'login'
-      ]),
+      // ...mapState([
+      //   'login'
+      // ]),
       usernameErrors() {
         var field = this.$v.user.username;
         let error = [];

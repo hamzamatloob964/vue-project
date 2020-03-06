@@ -10,16 +10,16 @@
     <div class="card-main pl-5 pr-5">
       <v-data-table
         :headers="headers"
-        :items="banks"
+        :items="feedbackList"
         sort-by="calories"
         class="elevation-1"
       >
         <template v-slot:body = {items}>
           <tbody>
-            <tr v-for="item in items" :key="item.name" @click="selectItem(item)">
+            <tr v-for="(item,i) in items" :key="i" @click="selectItem(item)">
               <td>{{ item.name }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.name }}</td>
+              <td>{{ item.phoneno }}</td>
+              <td>{{ item.message }}</td>
               <!-- <td>{{ item.age }}</td> -->
             </tr>
           </tbody>
@@ -65,10 +65,13 @@
     </div> -->
   <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
     <v-card>
-      <v-card-title ><span class="headline blue--text">FEEDBACK</span></v-card-title>
+      <v-card-title ><span class="headline blue--text">{{title}}</span></v-card-title>
       <v-card-text>
         <br>
-        <v-label><span>" {{msg}} "</span></v-label>
+        <v-label><span>" {{msg}} "</span></v-label><br>
+        <v-btn class="mt-5 white--text" color="blue" @click="showAttachment">
+          View Attachment
+        </v-btn>
         
       </v-card-text>
       <v-card-actions>
@@ -89,7 +92,9 @@ export default {
 name:'AppFeedback',
 data () {
   return {
-    msg: 'jvvhvhj hjbh hj h hjhjv jh bj  jhvjhvjhvjhvj jhvj ',
+    msg: '',
+    title:'',
+    attachment:'',
     dialog: false,
     banks:[
         {
@@ -108,26 +113,26 @@ data () {
           name: 'KitKat'
         },
       ],
-      headers: [
-        {
-          text: 'Name',
-          align: 'left',
-          sortable: false,
-          value: 'action',
-        },
-        {
-          text: 'Phone no',
-          align: 'left',
-          sortable: false,
-          value: 'name',
-        },
-        {
-          text: 'Feedback',
-          align: 'left',
-          sortable: false,
-          value: 'name',
-        }
-      ],
+    headers: [
+      {
+        text: 'Name',
+        align: 'left',
+        sortable: false,
+        value: 'name',
+      },
+      {
+        text: 'Phone no',
+        align: 'left',
+        sortable: false,
+        value: 'phoneno',
+      },
+      {
+        text: 'Feedback',
+        align: 'left',
+        sortable: false,
+        value: 'message',
+      }
+    ],
   }
 },
 methods: {
@@ -137,8 +142,14 @@ methods: {
   showMsg (item) {
     this.msg = item.msg;
   },
-  selectItem(){
+  selectItem(item){
+    this.msg = item.message
+    this.title = item.title
+    this.attachment = item.attachment
     this.dialog = true;
+  },
+  showAttachment () {
+    window.open(this.attachment)
   }
 },
 computed: {

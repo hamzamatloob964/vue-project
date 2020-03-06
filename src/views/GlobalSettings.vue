@@ -16,13 +16,13 @@
       <div class="payment-gateway pl-5 pr-5">
         <h3>Payment Gateway </h3>
         <v-switch v-model="slip" color="indigo" class="mx-2" 
-        label="Bank slip upload" @click="paymentGatewaySlipFunc">
+        label="Bank slip upload" @change="paymentGatewaySlipFunc">
         </v-switch>
-        <v-switch v-model="bills" color="indigo" class="mx-2" 
-        label="Bills" @click="paymentGatewayBillsFunc" >
+        <v-switch v-model="billplz" color="indigo" class="mx-2" 
+        label="Billplz" @change="paymentGatewayBillsFunc" >
         </v-switch>
         <v-switch v-model="stripe" color="indigo" class="mx-2" 
-        label="Stripe" @click="paymentGatewayStripeFunc">
+        label="Stripe" @change="paymentGatewayStripeFunc">
         </v-switch>
       </div>
       <div class="country pl-5 pr-5 ">
@@ -110,7 +110,7 @@ export default {
       showInput: false,
       showText: false,
       slip: false,
-      bills: false,
+      billplz: false,
       stripe: false,
       bank:'',
       country:'',
@@ -337,8 +337,18 @@ export default {
       ],
     }
   },
+  mounted () {
+    this.getGlobalSettings().then(() => {
+      this.tenanatAccount = this.globalSttings.registrations.tenant
+      this.ownerAccount = this.globalSttings.registrations.owner
+      this.stripe = this.globalSttings.payments.stripe
+      this.billplz = this.globalSttings.payments.billplz
+      this.slip = this.globalSttings.payments.bankslip
+    })
+  },
   methods: {
     ...mapActions([
+      'getGlobalSettings',
       'disableTenantAccount',
       'globalPaymentGatewaySlip',
       'paymentGatewayBillsFunc',
@@ -425,7 +435,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'banksList'
+      'banksList',
+      'globalSttings'
     ]),
     formTitle () {
       return this.editedIndex === -1 ? 'Add Bank' : 'Edit Bank'
@@ -439,8 +450,6 @@ export default {
   created () {
     this.initialize()
   },
-  mounted () {
-  }
 }
 </script>
 

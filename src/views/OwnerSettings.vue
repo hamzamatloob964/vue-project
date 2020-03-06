@@ -27,11 +27,11 @@
     <div class="card-main pl-5 pr-5">
       <v-data-table
         :headers="headers"
-        :items="banks"
+        :items="owners"
         sort-by="calories"
         class="elevation-1"
       >
-        <template v-slot:item.action="{ }">
+        <template v-slot:item.action="{item}">
           <v-icon
             small
             class="mr-2"
@@ -41,81 +41,16 @@
           </v-icon>
           <v-icon
             small
-            @click="suspendOwner"
+            @click="suspendCurrentOwner(item)"
           >
             mdi-account-remove
           </v-icon>
-        </template>
-        <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
         </template>
       </v-data-table>
     </div>
     <AddOwner v-for="(item,i) in showAddDialog" :key="i"/>
     <OwnerPayment v-for="(item,i) in showPaymentDialog" :key="i"/>
-    <SuspendOwner v-for="(item,i) in showSuspendDialog" :key="i"/>
-    <!-- <v-app id="inspire">
-      <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
-        <v-card>
-          <v-card-title ><span class="headline blue--text"> ADD OWNER</span></v-card-title>
-          <v-card-text>
-            <br>
-            <v-text-field label="Enter Phone Number" v-model="ownerPNumber">
-            </v-text-field>
-            
-          </v-card-text>
-          <v-card-actions>
-            <div class="marginLeft" >
-              <v-btn color="blue darken-1" text @click="addOwnerFunc">
-                Submit</v-btn>
-              <v-btn color="blue darken-1" text @click.native="dialog = false">
-                close</v-btn>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-app>
-
-    <v-app >
-      <v-dialog v-model="dialog2"  transition="dialog-bottom-transition" width="40%">
-        <v-card>
-          <v-card-title ><span class="headline blue--text"> SUSPEND OWNER</span></v-card-title>
-          <v-card-text>
-            <br>
-            <v-label><span>Are you sure to suspend owner ?</span></v-label>
-            
-          </v-card-text>
-          <v-card-actions>
-            <div class="marginLeft">
-              <v-btn color="blue darken-1" text @click="suspendOwnerFunc">
-                Yes</v-btn>
-              <v-btn color="blue darken-1" text @click.native="dialog2 = false">
-                close</v-btn>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-app>
-
-    <v-app >
-      <v-dialog v-model="dialog3"  transition="dialog-bottom-transition" width="40%">
-        <v-card>
-          <v-card-title ><span class="headline blue--text"> Payment Gateway</span></v-card-title>
-          <v-card-text>
-            <br>
-            <div>
-              <v-switch v-model="slip" color="indigo" class="mx-2" 
-              label="Bank slip upload" @click="paymentGatewaySlipFunc">
-              </v-switch>
-            </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn class="marginLeft" color="blue darken-1" text @click.native="dialog3 = false" >
-              close</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-app> -->
+    <SuspendOwner :owner="currentOwner" v-for="(item,i) in showSuspendDialog" :key="i"/>
   </div>
 </template>
 
@@ -136,23 +71,6 @@ export default {
       showAddDialog: [],
       showPaymentDialog: [],
       showSuspendDialog: [],
-      banks:[
-        {
-          name: 'Jelly bean',
-        },
-        {
-          name: 'Lollipop'
-        },
-        {
-          name: 'Honeycomb'
-        },
-        {
-          name: 'Donut',
-        },
-        {
-          name: 'KitKat'
-        },
-      ],
       headers: [
         {
           text: 'Name',
@@ -161,31 +79,33 @@ export default {
           value: 'name',
         },
         {
-          text: 'Phone no',
+          text: 'PhoneNo',
           align: 'left',
           sortable: false,
-          value: 'name',
+          value: 'phoneNo',
         },
         {
           text: 'Properties',
           align: 'left',
           sortable: false,
-          value: 'name',
+          value: 'properties',
         },
         {
           text: 'Tenants',
           align: 'left',
           sortable: false,
-          value: 'name',
+          value: 'tenants',
         },
         {
           text: 'Total Rent',
           align: 'left',
           sortable: false,
-          value: 'name',
+          value: 'totalRent',
         },
         { text: 'Actions', value: 'action', sortable: false, align: 'right', },
       ],
+      owners: [],
+      currentOwner:{}
     }
   },
   components: {
@@ -198,9 +118,16 @@ export default {
     this.showAddDialog = []
     this.showPaymentDialog = []
     this.showSuspendDialog = []
+    this.getOwners().then(() =>{
+      this.owners = [...this.ownersList]
+      //console.log("owners array is :",this.ownersList)
+    }).catch(err => {
+      console.log("err : ",err)
+    })
   },
   methods: {
     ...mapActions([
+      'getOwners',
       'addOwner',
       'searchOwner',
       'suspendOwner',
@@ -208,9 +135,12 @@ export default {
       'paymentGatewayBills',
       'paymentGatewaySlip'
     ]),
+    // getOwnersList () {
+    //   this.getOwners()
+    // },
     searchFunc () {
       this.searchOwner(this.searchOwnerName)
-      console.log("router route is :",this.$route.matched)
+      //console.log("router route is :",this.$route.matched)
     },
     addOwnerFunc () {
       this.showAddDialog.push(1)
@@ -219,8 +149,10 @@ export default {
     paymentGateway () {
       this.showPaymentDialog.push(1)
     },
-    suspendOwner () {
-      this.showSuspendDialog.push(1)
+    suspendCurrentOwner (item) {
+      this.showAddDialog.push(1)
+      this.currentOwner = item
+      console.log("suspendddd : ",this.currentOwner)
     }
     // paymentGatewaySlipFunc () {
     //   //console.log("slip clicked :",this.slip)
@@ -235,7 +167,7 @@ export default {
   },
   computed: {
     ...mapState([
-      'ownerList'
+      'ownersList'
     ]),
   }
 }

@@ -1,15 +1,6 @@
 <template>
   <div class="loginPage justify-center">
     <v-card class="elevation-12">
-      <!-- <v-toolbar
-        color="#0082ca"
-        dark
-        flat
-        class="d-flex justify-center"
-      >
-        <v-spacer />
-
-      </v-toolbar> -->
       <v-card-title class="justify-center">
         <span class="headline blue--text">VERIFY OTP</span>
       </v-card-title>
@@ -29,7 +20,7 @@
       </v-card-text>
       <v-card-actions class="justify-center">
         <v-btn 
-          @click="logIn"
+          @click="verifyOtp"
           id="loginBtn"
           width="50%"
           class="white--text" 
@@ -37,72 +28,44 @@
           >Submit</v-btn>
       </v-card-actions>
     </v-card>
-    <!-- <v-otp-input
-      ref="otpInput"
-      input-classes="otp-input"
-      separator="-"
-      :num-inputs="4"
-      :should-auto-focus="true"
-      :is-input-num="true"
-      @on-change="handleOnChange"
-      @on-complete="handleOnComplete"
-    /> -->
-    <!-- <button @click="handleClearInput()">Clear Input</button> -->
   </div>
 </template>
 
 <script>
-//import mdiAccount from '@mdi/js'
 import router from '../router';
 import {mapActions} from 'vuex';
 import {mapState} from 'vuex';
-import { required, maxLength } from 'vuelidate/lib/validators'
-import Vue from 'vue'
-import Vuelidate from 'vuelidate'
 import '../assets/App.css'
-Vue.use(Vuelidate)
   export default {
-    name: 'logIn',
+    name: 'verifyOTP',
     data () {
       return {
-        user:{ otp1:'',otp2:'',otp3:'',otp4:'' },
+        otp:'',
         submitted: false
-      }
-    },
-    validations: {
-      user: {
-          otp1: { required,maxLength: maxLength(1) },
-          otp2: { required,maxLength: maxLength(1) },
-          otp3: { required,maxLength: maxLength(1) },
-          otp4: { required,maxLength: maxLength(1) }
       }
     },
     methods: {
       ...mapActions([
-        'Login'
+        'OTPVerify'
       ]),
-      logIn () {
-        router.push('/dashBoard');
-      //   this.submitted = true;
-      //   // stop here if form is invalid
-      //   this.$v.$touch();
-      //   if (this.$v.$invalid) {
-      //       return;
-      //   }
-      //   this.Login(this.user) .then(res => {
-      //     router.push('/dashboard');
-      //     console.log(res)
-      //   }).catch(err => {
-      //     console.log('ERROR OCCURED',err);
-      //     alert("Email or password is incorrect !")
-      //   }) 
-      //   //console.log("%%%%% DATA :"+this.login.email);
+      verifyOtp () {
+        if (!this.otp) {
+            alert("please provide correct OTP code to proceed")
+            return;
+        }
+        this.OTPVerify({otp:this.otp}) .then(() => {
+          router.push('/dashboard');
+        }).catch(err => {
+          console.log('ERROR OCCURED',err);
+          alert("OTP code is not valid !")
+        }) 
+      
       },
       handleOnComplete(value) {
-        console.log('OTP completed: ', value);
+        this.otp = value
       },
-      handleOnChange(value) {
-        console.log('OTP changed: ', value);
+      handleOnChange() {
+        this.otp = ''
       },
       handleClearInput() {
         this.$refs.otpInput.clearInput();
@@ -117,25 +80,6 @@ Vue.use(Vuelidate)
   }
 </script>
 <style lang="less">
-/* .login-btn {
-  width: 100px;
-  color: white;
-  margin-top: 55px;
-}
-.otp {
-  display: flex;
-  margin-top: 10px;
-}
-.field {
-  background-color: rgb(194, 186, 186);
-  width: 10px;
-  height: 55px;
-  margin-left: 5px;
-  font-size: 24px;
-}
-.otp-card {
-  height: 270px;
-} */
 .otp-input {
     width: 40px;
     height: 40px;

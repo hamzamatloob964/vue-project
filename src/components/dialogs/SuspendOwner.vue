@@ -24,6 +24,7 @@
  <script>
  export default {
    name: 'suspendOwner',
+   props: ['owner'],
    data () {
      return {
        dialog: true,
@@ -32,8 +33,10 @@
    },
    methods: {
      suspendOwnerFunc () {
-
      }
+   },
+   mounted() {
+     console.log("owner details :",this.owner)
    }
  }
  </script>

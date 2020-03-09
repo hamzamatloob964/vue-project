@@ -3,32 +3,7 @@
     <v-form
       ref="form"
       >
-      <!-- <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col
-            cols="12"
-            sm="8"
-            md="4"
-          >
-          </v-col>
-        </v-row>
-      </v-container> -->
       <v-card class="elevation-12">
-        <!-- <v-toolbar
-          color="#0082ca"
-          dark
-          flat
-          class="d-flex justify-center"
-        >
-          <v-toolbar-title >Login form</v-toolbar-title>
-          <v-spacer />
-        </v-toolbar> -->
         <v-card-title class="justify-center"><span class="headline blue--text">LOGIN</span></v-card-title>
         <v-divider></v-divider>
         <v-card-text>
@@ -39,10 +14,6 @@
             type="text"
             :error-messages="usernameErrors"
           />
-          <!-- <v-div v-if="submitted && $v.user.username.$error" >
-              <span style="color:red;" v-if="!$v.user.username.required">
-                username is required</span><br>
-          </v-div> -->
 
           <v-text-field
             id="password"
@@ -51,16 +22,8 @@
             type="password"
             :error-messages="passwordErrors"              
           />
-          <!-- <div v-if="submitted && $v.user.password.$error" class="invalid-feedback">
-            <span style="color:red;" v-if="!$v.user.password.required">
-              Password is required</span><br>
-            <span style="color:red;" v-if="!$v.user.password.maxLength">
-              Password should be at most 8 characters long</span>
-          </div> -->
         </v-card-text>
         <v-card-actions class="justify-center">
-          
-          <!-- <router-link to="/dashBoard"> -->
           <v-btn 
           @click="logIn"
           id="loginBtn"
@@ -68,27 +31,19 @@
           class="white--text" 
           color="blue"
           >Submit</v-btn>
-          <!-- </router-link> -->
-          <!-- <v-btn color="primary" class="ml-2">signUp</v-btn> -->
         </v-card-actions>
       </v-card>
     </v-form>
   </div>
-  <!-- <v-app id="inspire">
-    <v-content>
-    </v-content>
-  </v-app> -->
 </template>
 
 <script>
-//import router from '../router';
 import {mapActions} from 'vuex';
-// import {mapState} from 'vuex';
 import { required, maxLength } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import '../assets/App.css'
-var Cookies = require('vue-cookies')
+
 Vue.use(Vuelidate)
   export default {
     name: 'logIn',
@@ -114,23 +69,15 @@ Vue.use(Vuelidate)
         if (this.$v.$invalid) {
           return;
         }
-        //console.log("user login data :",this.user)
-        //this.$router.push('/OTPVerify');
         this.login(this.user) .then(() => {
-          console.log("cookies token is %%%%%%%:",Cookies.get('adminToken'))
           this.$router.push('/OTPVerify');
-          //router.push('/dashboard');
         }).catch(err => {
           console.log('ERROR OCCURED',err);
           alert("Email or password is incorrect !")
         }) 
-        //console.log("%%%%% DATA :"+this.login.email);
       }
     },
     computed: {
-      // ...mapState([
-      //   'login'
-      // ]),
       usernameErrors() {
         var field = this.$v.user.username;
         let error = [];

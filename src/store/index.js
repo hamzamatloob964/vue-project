@@ -1,35 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {post,get} from '../services/RestService'
+import {post,get,put} from '../services/RestService'
 var Cookies = require('vue-cookies')
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // ownerList: [
-    //   { name:'kashif', pNumber:'976-75-4356', noProperty:'5', 
-    //   noTenants:'4', rent:'200' },
-    //   { name:'kashif', pNumber:'976-75-4356', noProperty:'5', 
-    //   noTenants:'4', rent:'200' },
-    //   { name:'kashif', pNumber:'976-75-4356', noProperty:'5', 
-    //   noTenants:'4', rent:'200' },
-    //   { name:'kashif', pNumber:'976-75-4356', noProperty:'5', 
-    //   noTenants:'4', rent:'200' },
-    //   { name:'kashif', pNumber:'976-75-4356', noProperty:'5', 
-    //   noTenants:'4', rent:'200' },
-    // ],
     feedbackList: [
-      // { name:'usman', pNumber:'9876-665-445', 
-      // msg:'dasds adjabk ja sdkajsd kjasd kjjsd askjasda dkak'},
-      // { name:'usman', pNumber:'9876-665-445', 
-      // msg:'dasds adjabk ja sdkajsd kjasd kjjsd askjasda dkak'},
-      // { name:'usman', pNumber:'9876-665-445', 
-      // msg:'dasds adjabk ja sdkajsd kjasd kjjsd askjasda dkak'},
-      // { name:'usman', pNumber:'9876-665-445', 
-      // msg:'dasds adjabk ja sdkajsd kjasd kjjsd askjasda dkak'},
-      // { name:'usman', pNumber:'9876-665-445', 
-      // msg:'dasds adjabk ja sdkajsd kjasd kjjsd askjasda dkak'},
     ],
     token:'',
     ownersList:[],
@@ -39,12 +17,8 @@ export default new Vuex.Store({
     "SET_TOKEN": (state,token) => {
       Cookies.set('adminToken',token)
       Vue.set(state,'token',token)
-      //console.log("user token is ********** :",token)
     },
     "SET_OTP": () => {
-      //Cookies.set('Token',token)
-      //Vue.set(state,'token',token)
-      //console.log("user token is :",token)
     },
     "GET_OWNERS": (state,data) => {
       var obj = {}
@@ -59,8 +33,8 @@ export default new Vuex.Store({
         state.ownersList.push(obj)
         obj = {}
       }
-      //Vue.set(state,'ownersList',data)
-      //console.log("mutation owner list is  :",data)
+    },
+    "SUSPEND_OWNER": () => {
     },
     "GET_APP_FEEDBACKS": (state,data) => {
       // var obj = {}
@@ -92,12 +66,26 @@ export default new Vuex.Store({
       Vue.set(state,'globalSttings',data)
       //console.log("mutation globalSttings list is  :",data)
     },
+    "GLOBAL_PAYMENT_GATEWAY_SLIP": () => {
+    },
+    "GLOBAL_PAYMENT_GATEWAY_BILLS": () => {
+    },
+    "GLOBAL_PAYMENT_GATEWAY_STRIPE" : () => {
+    },
+    "GLOBAL_TENANT_ACCOUNT": () => {
+    },
+    "GLOBAL_OWNER_ACCOUNT": () => {
+    },
+  },
+  getters: {
+    loggedIn () {
+      return Cookies.get('adminToken')
+    }
   },
   actions: {
     login ({commit},data) {
       return new Promise (function (resolve,reject) {
         post('login',data).then(res => {
-          console.log("login response is : ",res)
           commit("SET_TOKEN", res.idToken);
           resolve(res)
         }).catch(err => {
@@ -107,17 +95,9 @@ export default new Vuex.Store({
       })
     },
     OTPVerify ({commit},otp) {
-      //console.log("store otp :",otp)
       return new Promise (function (resolve,reject) {
-        let token = Cookies.get('adminToken')
-        token = 'bearer '+token
-        let obj = {'Authorization': token}
-        //console.log("cookies is :",Cookies.get('adminToken'))
-        //console.log("otp is ******* :",otp)
-        post('verifyotp',otp,{headers:obj}).then(res => {
+        post('verifyotp',otp).then(res => {
           commit("SET_OTP", res.idToken);
-          //console.log("OTP response is : ",res)
-          //commit("SET_TOKEN", res.idToken);
           resolve(res)
         }).catch(err => {
           reject(err)
@@ -128,6 +108,16 @@ export default new Vuex.Store({
       return new Promise (function (resolve,reject) {
         get('owners').then(res => {
           commit("GET_OWNERS", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    suspendOwner ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('owners',data).then(res => {
+          commit("SUSPEND_OWNER", res);
           resolve(res)
         }).catch(err => {
           reject(err)
@@ -154,24 +144,56 @@ export default new Vuex.Store({
         })
       })
     },
-    addOwner (data) {
-      console.log(data);
+    globalPaymentGatewaySlip ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('configs',data).then(res => {
+          commit("GLOBAL_PAYMENT_GATEWAY_SLIP", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
     },
-    searchOwner (data) {
-      console.log(data);
+    globalPaymentGatewayBills ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('configs',data).then(res => {
+          commit("GLOBAL_PAYMENT_GATEWAY_BILLS", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
     },
-    suspendOwner (data) {
-      console.log(data);
+    globalPaymentGatewayStripe ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('configs',data).then(res => {
+          commit("GLOBAL_PAYMENT_GATEWAY_STRIPE", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
     },
-    paymentGatewayStripe (data) {
-      console.log(data);
+    globalTenantAccount ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('configs',data).then(res => {
+          commit("GLOBAL_TENANT_ACCOUNT", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
     },
-    paymentGatewayBills (data) {
-      console.log(data);
-    },
-    paymentGatewaySlip (data) {
-      console.log(data);
-    },
+    globalOwnerAccount ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('configs',data).then(res => {
+          commit("GLOBAL_OWNER_ACCOUNT", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    }
   },
   modules: {
   }

@@ -50,11 +50,12 @@ import '../assets/App.css'
       ]),
       verifyOtp () {
         if (!this.otp) {
-            alert("please provide correct OTP code to proceed")
-            return;
+          alert("please provide correct OTP code to proceed")
+          return;
         }
         this.OTPVerify({otp:this.otp}) .then(() => {
-          router.push('/dashboard');
+          console.log("inside res........")
+          router.push('/dashBoard');
         }).catch(err => {
           console.log('ERROR OCCURED',err);
           alert("OTP code is not valid !")

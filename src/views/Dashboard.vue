@@ -49,6 +49,7 @@
 </template>
 
 <script>
+var Cookies = require('vue-cookies')
 import {mapActions} from 'vuex';
   export default {
     props: {
@@ -74,9 +75,10 @@ import {mapActions} from 'vuex';
       ...mapActions([
       ]),
       logout () {
+        Cookies.remove('adminToken');
         //this.$store.state.token = null;
         // this.$store.dispatch('Logout');
-        // router.push('/login');
+        this.$router.push('/');
 
       }
     }

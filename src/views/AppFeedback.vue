@@ -29,57 +29,23 @@
         </template>
       </v-data-table>
     </div>
-    <!-- <div class="card-main pa-5">
-      <template>
-        <v-card
-          outlined class="card"
-          max-width="700px"
-          height="130"
-          flat
-          @click.stop="dialog = true"
-          @click="showMsg(item)"
-          v-for="(item,i) in feedbackList" :key="i"
-        >
-          <v-list-item>
-            <v-list-item-avatar
-              tile
-              size="75"
-              color="grey"
-              class="mt-6"
-            >
-            <v-img
-              src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-            /></v-list-item-avatar>
-            <v-list-item-content>
-              <v-card-title class="title  mb-1">{{item.name}}</v-card-title>
-              <v-card-subtitle >
-                <span class='text--primary'><v-icon class="">mdi-cellphone-basic</v-icon>  
-              {{item.pNumber}}</span> &mdash; {{item.msg}}
-              </v-card-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card>
-      </template>
-      <v-app >
-      </v-app>
-    </div> -->
-  <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
-    <v-card>
-      <v-card-title ><span class="headline blue--text">{{title}}</span></v-card-title>
-      <v-card-text>
-        <br>
-        <v-label><span>" {{msg}} "</span></v-label><br>
-        <v-btn class="mt-5 white--text" color="blue" @click="showAttachment">
-          View Attachment
-        </v-btn>
-        
-      </v-card-text>
-      <v-card-actions>
-        <v-btn class="marginLeft" color="blue darken-1" text @click.native="dialog = false">
-          close</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
+      <v-card>
+        <v-card-title ><span class="headline blue--text">{{title}}</span></v-card-title>
+        <v-card-text>
+          <br>
+          <v-label><span>" {{msg}} "</span></v-label><br>
+          <v-btn class="mt-5 white--text" color="blue" @click="showAttachment">
+            View Attachment
+          </v-btn>
+          
+        </v-card-text>
+        <v-card-actions>
+          <v-btn class="marginLeft" color="blue darken-1" text @click.native="dialog = false">
+            close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -96,23 +62,6 @@ data () {
     title:'',
     attachment:'',
     dialog: false,
-    banks:[
-        {
-          name: 'Jelly bean',
-        },
-        {
-          name: 'Lollipop'
-        },
-        {
-          name: 'Honeycomb'
-        },
-        {
-          name: 'Donut',
-        },
-        {
-          name: 'KitKat'
-        },
-      ],
     headers: [
       {
         text: 'Name',

@@ -7,10 +7,10 @@
       <div class="tenant-account pl-5 pr-5">
         <h3>Disable Account </h3>
         <v-switch v-model="tenanatAccount" color="indigo"
-          label="Disable tenant account setup">
+          label="Disable tenant account setup" @change="tenantAccountFunc">
         </v-switch>
         <v-switch v-model="ownerAccount" color="indigo"
-          label="Disable owner account setup">
+          label="Disable owner account setup" @change="ownerAccountFunc">
         </v-switch>
       </div>
       <div class="payment-gateway pl-5 pr-5">
@@ -34,6 +34,7 @@
         v-model="country"
         :items="countriesList"
         label="Select Country"
+        @change="selectCountry(country)"
         >
         </v-select>
       </div>
@@ -86,9 +87,6 @@
               mdi-delete
             </v-icon>
           </template>
-          <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize">Reset</v-btn>
-          </template>
         </v-data-table>
       </div>
     </div>
@@ -117,10 +115,8 @@ export default {
       selectedItem: '',
       tenanatAccount: false,
       ownerAccount: false,
-      items: ["asdad","adasda","asdasda"],
+      //items: ["asdad","adasda","asdasda"],
       dialog: false,
-      dialog2: false,
-      dialog3: false,
       headers: [
         {
           text: 'Bank Names',
@@ -335,6 +331,11 @@ export default {
         "Zambia",
         "Zimbabwe"
       ],
+      banksLst:[
+        {country:'Albania',bank:['dasdas','asdasd','adada','asdasd']},
+        {country:'Algeria',bank:['adsd','asda','asdasd','sada']},
+        {country:'Angola',bank:['adads','adasd','asdas']}
+      ]
     }
   },
   mounted () {
@@ -349,51 +350,48 @@ export default {
   methods: {
     ...mapActions([
       'getGlobalSettings',
-      'disableTenantAccount',
+      'globalTenantAccount',
+      'globalOwnerAccount',
       'globalPaymentGatewaySlip',
-      'paymentGatewayBillsFunc',
-      'paymentGatewayStripeFunc'
+      'globalPaymentGatewayBills',
+      'globalPaymentGatewayStripe'
     ]),
+    selectCountry (data) {
+      this.banks = []
+      for(let item of this.banksLst){
+        if(item.country == data){
+          for(let data of item.bank){
+            let obj = {}
+            obj.name = data
+            this.banks.push(obj)
+          }
+        }
+      }
+    },
     showBankList () {
       this.showBanksList(this.country)
     },
     paymentGatewaySlipFunc () {
-      this.globalPaymentGatewaySlip(this.slip);
+      this.globalPaymentGatewaySlip({payments:{bankslip:this.slip}});
     },
     paymentGatewayBillsFunc () {
-      this.globalPaymentGatewayBills(this.bills);
+      this.globalPaymentGatewayBills({payments:{billplz:this.billplz}});
     },
     paymentGatewayStripeFunc () {
-      this.globalPaymentGatewayStripe(this.stripe);
+      this.globalPaymentGatewayStripe({payments:{stripe:this.stripe}});
     },
-    disableTenantAccountFunc () {
-      this.disableTenantAccount();
+    tenantAccountFunc () {
+      this.globalTenantAccount({registrations:{tenant:this.tenanatAccount}});
     },
+    ownerAccountFunc () {
+      this.globalOwnerAccount({registrations:{tenant:this.ownerAccount}});
+    },
+
     addBank () {
       this.showText = false
       this.dialog = true
       this.showInput = true
     },
-    initialize () {
-      this.banks = [
-        {
-          name: 'Jelly bean',
-        },
-        {
-          name: 'Lollipop'
-        },
-        {
-          name: 'Honeycomb'
-        },
-        {
-          name: 'Donut',
-        },
-        {
-          name: 'KitKat'
-        },
-      ]
-    },
-
     // editItem (item) {
     //   this.showText = false
     //   this.showInput = true
@@ -407,7 +405,6 @@ export default {
       this.showText = true
       this.dialog = true;
       this.selectedItem = item;
-      //console.log(item);
     },
 
     deleteSelectedItem () {
@@ -446,10 +443,7 @@ export default {
     dialog (val) {
       val || this.close()
     },
-  },
-  created () {
-    this.initialize()
-  },
+  }
 }
 </script>
 
@@ -459,18 +453,6 @@ export default {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-}
-/* .main{
-  display: flex;
-  flex-direction: column;
-  height: 425px;
-} */
-/* .payment{
-  background-color: red;
-  height: 60px;
-  display: flex;
-} */
-.add-bank{
 }
 .tenant-account{
   display: flex;
@@ -491,21 +473,12 @@ export default {
 }
 .select{
   margin-top: 5px;
-  /* margin-left: 30px; */
-  /* align-self:center; */
-  /* width: 520px; */
 }
 .country-banks{
-  /* height: 108px; */
   width: 100%;
   margin-bottom: 10px;
-  /* overflow-y: scroll; */
 }
 .payment-btn{
   margin-left: 30px;
 }
-/* .switch{
-  margin-top: 0px;
-  margin-left: 30px;
-} */
 </style>

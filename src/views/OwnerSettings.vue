@@ -3,7 +3,6 @@
     <div class="pa-5 ">
       <div class="toolbar">
         <Breadcrumb class="breadcrumb" />
-        <!-- <div class="search"> -->
         <v-text-field
         class="mt-5 mx-4"
         flat
@@ -14,7 +13,6 @@
         solo-inverted
         clearable
         ></v-text-field>
-        <!-- </div> -->
         <v-btn
           outlined color="orange"
           @click="addOwnerFunc"
@@ -48,9 +46,9 @@
         </template>
       </v-data-table>
     </div>
-    <AddOwner v-for="(item,i) in showAddDialog" :key="i"/>
-    <OwnerPayment v-for="(item,i) in showPaymentDialog" :key="i"/>
-    <SuspendOwner :owner="currentOwner" v-for="(item,i) in showSuspendDialog" :key="i"/>
+    <AddOwner v-for="(item,i) in showAddDialog" :key="'add'+i"/>
+    <OwnerPayment v-for="(item,i) in showPaymentDialog" :key="'pay'+i"/>
+    <SuspendOwner :owner="currentOwner" v-for="(item,i) in showSuspendDialog" :key="'susp'+i"/>
   </div>
 </template>
 
@@ -120,7 +118,6 @@ export default {
     this.showSuspendDialog = []
     this.getOwners().then(() =>{
       this.owners = [...this.ownersList]
-      //console.log("owners array is :",this.ownersList)
     }).catch(err => {
       console.log("err : ",err)
     })
@@ -135,49 +132,34 @@ export default {
       'paymentGatewayBills',
       'paymentGatewaySlip'
     ]),
-    // getOwnersList () {
-    //   this.getOwners()
-    // },
     searchFunc () {
       this.searchOwner(this.searchOwnerName)
-      //console.log("router route is :",this.$route.matched)
     },
     addOwnerFunc () {
       this.showAddDialog.push(1)
-      //this.addOwner(this.ownerPNumber);
     },
     paymentGateway () {
       this.showPaymentDialog.push(1)
     },
     suspendCurrentOwner (item) {
-      this.showAddDialog.push(1)
+      this.showSuspendDialog.push(1)
       this.currentOwner = item
-      console.log("suspendddd : ",this.currentOwner)
     }
-    // paymentGatewaySlipFunc () {
-    //   //console.log("slip clicked :",this.slip)
-    //   this.paymentGatewaySlip(this.slip);
-    // },
-    // paymentGatewayBillsFunc () {
-    //   this.paymentGatewayBills(this.bills);
-    // },
-    // paymentGatewayStripeFunc () {
-    //   this.paymentGatewayStripe(this.stripe);
-    // },
   },
   computed: {
     ...mapState([
       'ownersList'
     ]),
+  },
+  watch:{
+    ownersList() {
+      this.owners = [...this.ownersList]
+    }
   }
 }
 </script>
 
 <style scoped>
-.main{
-  /* height: 600px; */
-  /* background-color: blue; */
-}
 .card-main {
   height: 399px;
   width: 100%;

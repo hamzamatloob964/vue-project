@@ -25,6 +25,7 @@
           width="50%"
           class="white--text" 
           color="blue"
+          :loading="loading"
           >Submit</v-btn>
       </v-card-actions>
     </v-card>
@@ -41,7 +42,8 @@ import '../assets/App.css'
     data () {
       return {
         otp:'',
-        submitted: false
+        submitted: false,
+        loading: false
       }
     },
     methods: {
@@ -50,17 +52,18 @@ import '../assets/App.css'
       ]),
       verifyOtp () {
         if (!this.otp) {
-          alert("please provide correct OTP code to proceed")
+          alert("please provide complete OTP code to proceed")
           return;
         }
+        this.loading = true
         this.OTPVerify({otp:this.otp}) .then(() => {
           console.log("inside res........")
           router.push('/dashBoard');
-        }).catch(err => {
-          console.log('ERROR OCCURED',err);
+        }).catch(() => {
+          //console.log('ERROR OCCURED',err);
+          this.loading = false
           alert("OTP code is not valid !")
         }) 
-      
       },
       handleOnComplete(value) {
         this.otp = value

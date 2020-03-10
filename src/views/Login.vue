@@ -30,6 +30,7 @@
           width="50%"
           class="white--text" 
           color="blue"
+          :loading="loading"
           >Submit</v-btn>
         </v-card-actions>
       </v-card>
@@ -51,6 +52,7 @@ Vue.use(Vuelidate)
       return {
         user:{ username:'',password:'' },
         errors: null,
+        loading: false
 
       }
     },
@@ -69,10 +71,12 @@ Vue.use(Vuelidate)
         if (this.$v.$invalid) {
           return;
         }
-        this.login(this.user) .then(() => {
+        this.loading = true
+        this.login(this.user).then(() => {
           this.$router.push('/OTPVerify');
-        }).catch(err => {
-          console.log('ERROR OCCURED',err);
+        }).catch(() => {
+          //console.log('ERROR OCCURED',err);
+          this.loading = false
           alert("Email or password is incorrect !")
         }) 
       }

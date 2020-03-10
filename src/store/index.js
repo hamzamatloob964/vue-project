@@ -30,11 +30,14 @@ export default new Vuex.Store({
         obj.status = data[i].user.status
         obj.properties = data[i].properties
         obj.tenants = data[i].tenants
+        obj.configs = data[i].configs
         state.ownersList.push(obj)
         obj = {}
       }
     },
     "SUSPEND_OWNER": () => {
+    },
+    "GET_OWNERS_CONFIGS": () => {
     },
     "GET_APP_FEEDBACKS": (state,data) => {
       // var obj = {}
@@ -75,6 +78,16 @@ export default new Vuex.Store({
     "GLOBAL_TENANT_ACCOUNT": () => {
     },
     "GLOBAL_OWNER_ACCOUNT": () => {
+    },
+    "PAYMENT_GATEWAY_SLIP": () => {
+    },
+    "PAYMENT_GATEWAY_BILLS": () => {
+    },
+    "PAYMENT_GATEWAY_STRIPE": () => {
+    },
+    "PAYMENT_GATEWAY_PAYPAL": () => {
+    },
+    "PAYMENT_GATEWAY_REGISTRATIONS": () => {
     },
   },
   getters: {
@@ -118,6 +131,56 @@ export default new Vuex.Store({
       return new Promise (function (resolve,reject) {
         put('owners',data).then(res => {
           commit("SUSPEND_OWNER", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    paymentGatewayRegistration ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('user-configs',data).then(res => {
+          commit("PAYMENT_GATEWAY_REGISTRATIONS", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    paymentGatewayPaypal ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('user-configs',data).then(res => {
+          commit("PAYMENT_GATEWAY_PAYPAL", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    paymentGatewayStripe ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('user-configs',data).then(res => {
+          commit("PAYMENT_GATEWAY_STRIPE", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    paymentGatewayBills ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('user-configs',data).then(res => {
+          commit("PAYMENT_GATEWAY_BILLS", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    paymentGatewaySlip ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        put('user-configs',data).then(res => {
+          commit("PAYMENT_GATEWAY_SLIP", res);
           resolve(res)
         }).catch(err => {
           reject(err)

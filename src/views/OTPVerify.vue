@@ -57,7 +57,7 @@ import '../assets/App.css'
         }
         this.loading = true
         this.OTPVerify({otp:this.otp}) .then(() => {
-          console.log("inside res........")
+          //console.log("inside res........")
           router.push('/dashBoard');
         }).catch(() => {
           //console.log('ERROR OCCURED',err);

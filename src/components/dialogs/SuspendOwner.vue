@@ -3,7 +3,6 @@
     <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
       <v-card>
         <v-card-title ><span class="headline blue--text"> SUSPEND OWNER</span></v-card-title>
-
         <v-card-text>
           <br>
           <div v-if="!displayError">
@@ -12,7 +11,6 @@
           </div>
           <v-label v-if="displayError"><span>Owner is already suspended.</span></v-label>
         </v-card-text>
-
         <v-card-actions>
           <div class="marginLeft">
             <div v-if="!displayError">
@@ -22,10 +20,9 @@
                 close</v-btn>
             </div>
             <v-btn v-if="displayError" color="blue darken-1" text @click.native="dialog = false">
-                close</v-btn>
+              close</v-btn>
           </div>
         </v-card-actions>
-
       </v-card>
     </v-dialog>
    </div>
@@ -41,7 +38,7 @@
        dialog: true,
        ownerPNumber:'',
        displaySucccess: false,
-       displayError: false
+       displayError: false,
      }
    },
    methods: {
@@ -57,7 +54,7 @@
            this.getOwners()
          })
        }
-       else if (this.owner.status != 'active'){
+       else if (this.owner.status == 'suspended'){
          this.displayError = true
        }
      }

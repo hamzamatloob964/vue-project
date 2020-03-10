@@ -73,6 +73,7 @@ Vue.use(Vuelidate)
         }
         this.loading = true
         this.login(this.user).then(() => {
+          //console.log("login res data:",res)
           this.$router.push('/OTPVerify');
         }).catch(() => {
           //console.log('ERROR OCCURED',err);

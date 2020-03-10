@@ -14,7 +14,7 @@
         clearable
         ></v-text-field>
         <v-btn
-          outlined color="orange"
+          outlined color="blue"
           @click="addOwnerFunc"
           class="add-btn"
         >
@@ -33,7 +33,7 @@
           <v-icon
             small
             class="mr-2"
-            @click="paymentGateway"
+            @click="paymentGateway(item)"
           >
             mdi-cash-multiple
           </v-icon>
@@ -47,7 +47,7 @@
       </v-data-table>
     </div>
     <AddOwner v-for="(item,i) in showAddDialog" :key="'add'+i"/>
-    <OwnerPayment v-for="(item,i) in showPaymentDialog" :key="'pay'+i"/>
+    <OwnerPayment :owner="currentOwner" v-for="(item,i) in showPaymentDialog" :key="'pay'+i"/>
     <SuspendOwner :owner="currentOwner" v-for="(item,i) in showSuspendDialog" :key="'susp'+i"/>
   </div>
 </template>
@@ -130,7 +130,7 @@ export default {
       'suspendOwner',
       'paymentGatewayStripe',
       'paymentGatewayBills',
-      'paymentGatewaySlip'
+      'paymentGatewaySlip',
     ]),
     searchFunc () {
       this.searchOwner(this.searchOwnerName)
@@ -138,10 +138,13 @@ export default {
     addOwnerFunc () {
       this.showAddDialog.push(1)
     },
-    paymentGateway () {
+    paymentGateway (item) {
+      this.currentOwner = {}
       this.showPaymentDialog.push(1)
+      this.currentOwner = item
     },
     suspendCurrentOwner (item) {
+      this.currentOwner = {}
       this.showSuspendDialog.push(1)
       this.currentOwner = item
     }

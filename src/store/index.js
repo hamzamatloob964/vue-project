@@ -37,6 +37,8 @@ export default new Vuex.Store({
     },
     "SUSPEND_OWNER": () => {
     },
+    "ADD_OWNER": () => {
+    },
     "GET_OWNERS_CONFIGS": () => {
     },
     "GET_APP_FEEDBACKS": (state,data) => {
@@ -131,6 +133,16 @@ export default new Vuex.Store({
       return new Promise (function (resolve,reject) {
         put('owners',data).then(res => {
           commit("SUSPEND_OWNER", res);
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    addOwner ({commit},data) {
+      return new Promise (function (resolve,reject) {
+        post('owners',data).then(res => {
+          commit("ADD_OWNER", res);
           resolve(res)
         }).catch(err => {
           reject(err)

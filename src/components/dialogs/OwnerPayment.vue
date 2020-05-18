@@ -1,36 +1,36 @@
 <template>
-   <div>
-     <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
-        <v-card>
-          <v-card-title ><span class="headline blue--text">Owner Configurations</span></v-card-title>
-          <v-card-text>
-            <br>
-            <div>
-              <v-switch v-model="registrations" color="indigo" class="mx-2" 
-              label="Tenant Registrations" @change="paymentGatewayRegistrationsFunc">
-              </v-switch>
-              <v-switch v-model="slip" color="indigo" class="mx-2" 
-              label="Bank slip upload" @change="paymentGatewaySlipFunc">
-              </v-switch>
-              <v-switch v-model="bills" color="indigo" class="mx-2" 
-              label="Billplz" @change="paymentGatewayBillsFunc">
-              </v-switch>
-              <v-switch v-model="stripe" color="indigo" class="mx-2" 
-              label="Stripe" @change="paymentGatewayStripeFunc">
-              </v-switch>
-              <v-switch v-model="paypal" color="indigo" class="mx-2" 
-              label="Paypal" @change="paymentGatewayPaypalFunc">
-              </v-switch>
-            </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn class="marginLeft" color="blue darken-1" text @click.native="dialog = false" >
-              close</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-   </div>
- </template>
+  <div>
+    <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
+      <v-card>
+        <v-card-title ><span class="headline blue--text">Owner Configurations</span></v-card-title>
+        <v-card-text>
+          <br>
+          <div>
+            <v-switch v-model="registrations" color="indigo" class="mx-2" 
+            label="Tenant Registrations" @change="paymentGatewayRegistrationsFunc">
+            </v-switch>
+            <v-switch v-model="slip" color="indigo" class="mx-2" 
+            label="Bank slip upload" @change="paymentGatewaySlipFunc">
+            </v-switch>
+            <v-switch v-model="bills" color="indigo" class="mx-2" 
+            label="Billplz" @change="paymentGatewayBillsFunc">
+            </v-switch>
+            <v-switch v-model="stripe" color="indigo" class="mx-2" 
+            label="Stripe" @change="paymentGatewayStripeFunc">
+            </v-switch>
+            <v-switch v-model="paypal" color="indigo" class="mx-2" 
+            label="Paypal" @change="paymentGatewayPaypalFunc">
+            </v-switch>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn class="marginLeft" color="blue darken-1" text @click.native="dialog = false" >
+            close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
  
  <script>
  import {mapActions} from 'vuex';

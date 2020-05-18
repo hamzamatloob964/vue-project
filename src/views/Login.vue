@@ -40,7 +40,7 @@
 
 <script>
 import {mapActions} from 'vuex';
-import { required, maxLength } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import '../assets/App.css'
@@ -59,7 +59,7 @@ Vue.use(Vuelidate)
     validations: {
       user: {
           username: { required },
-          password: { required, maxLength: maxLength(8) }
+          password: { required, minLength: minLength(6) }
       }
     },
     methods: {
@@ -95,7 +95,7 @@ Vue.use(Vuelidate)
         let error = [];
         if(!field.$dirty) return error;
         !field.required && error.push('Password is required!')
-        !field.maxLength && error.push('Password length is atmost 8 characters long!')
+        !field.minLength && error.push('Password length is atmost 8 characters long!')
         return error;
       }
     },

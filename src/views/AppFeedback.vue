@@ -34,8 +34,8 @@
         <v-card-title ><span class="headline blue--text">{{title}}</span></v-card-title>
         <v-card-text>
           <br>
-          <v-label><span>" {{msg}} "</span></v-label><br>
-          <v-btn class="mt-5 white--text" color="blue" @click="showAttachment">
+          <v-label><span>{{msg}}</span></v-label><br>
+          <v-btn v-if="this.attachment" class="mt-5 white--text" color="blue" @click="showAttachment">
             View Attachment
           </v-btn>
           

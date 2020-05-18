@@ -32,7 +32,7 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="white--text">
       </v-app-bar-nav-icon>
-      <v-toolbar-title class="white--text">APPLICATION</v-toolbar-title>
+      <v-toolbar-title class="white--text">8Rent Admin</v-toolbar-title>
     </v-app-bar>
 
     <v-content>

@@ -5,6 +5,11 @@
   width: 500px;
   margin: auto;
 }
+.changePass{
+  width: 500px;
+  margin: auto;
+  /* overflow: auto; */
+}
 .login-btn {
   width: 100px;
   color: white;

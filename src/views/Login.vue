@@ -2,6 +2,7 @@
   <div class="loginPage justify-center">
     <v-form
       ref="form"
+      @keyup.native.enter="logIn"
       >
       <v-card class="elevation-12">
         <v-card-title class="justify-center"><span class="headline blue--text">LOGIN</span></v-card-title>
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+var Cookies = require('vue-cookies')
 import {mapActions} from 'vuex';
 import { required, minLength } from 'vuelidate/lib/validators'
 import Vue from 'vue'
@@ -72,8 +74,10 @@ Vue.use(Vuelidate)
           return;
         }
         this.loading = true
+        console.log("user obj :",this.user)
         this.login(this.user).then(() => {
           //console.log("login res data:",res)
+          Cookies.set('user',this.user.username)
           this.$router.push('/OTPVerify');
         }).catch(() => {
           //console.log('ERROR OCCURED',err);

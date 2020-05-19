@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashboard.vue'
 import OwnerSettings from '../views/OwnerSettings.vue'
 import GlobalSettings from '../views/GlobalSettings.vue'
 import AppFeedback from '../views/AppFeedback.vue'
+import ChangePassword from '../views/ChangePassword.vue'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import OTPVerify from '../views/OTPVerify.vue'
@@ -53,6 +54,11 @@ const routes = [
         path: 'appFeedback',
         name: 'App Feedback',
         component: AppFeedback
+      },
+      {
+        path: 'changePassword',
+        name: 'Change Password',
+        component: ChangePassword
       },
     ]
   },

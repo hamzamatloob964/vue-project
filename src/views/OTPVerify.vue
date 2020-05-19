@@ -1,34 +1,36 @@
 <template>
   <div class="loginPage justify-center">
-    <v-card class="elevation-12">
-      <v-card-title class="justify-center">
-        <span class="headline blue--text">VERIFY OTP</span>
-      </v-card-title>
-      <v-divider></v-divider>
-      <v-card-text>
-        <v-otp-input
-          class="justify-center"
-          ref="otpInput"
-          input-classes="otp-input"
-          separator="-"
-          :num-inputs="6"
-          :should-auto-focus="true"
-          :is-input-num="true"
-          @on-change="handleOnChange"
-          @on-complete="handleOnComplete"
-        />
-      </v-card-text>
-      <v-card-actions class="justify-center">
-        <v-btn 
-          @click="verifyOtp"
-          id="loginBtn"
-          width="50%"
-          class="white--text" 
-          color="blue"
-          :loading="loading"
-          >Submit</v-btn>
-      </v-card-actions>
-    </v-card>
+    <v-form @keyup.native.enter="verifyOtp" ref="form">
+      <v-card class="elevation-12">
+        <v-card-title class="justify-center">
+          <span class="headline blue--text">VERIFY OTP</span>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-otp-input
+            class="justify-center"
+            ref="otpInput"
+            input-classes="otp-input"
+            separator="-"
+            :num-inputs="6"
+            :should-auto-focus="true"
+            :is-input-num="true"
+            @on-change="handleOnChange"
+            @on-complete="handleOnComplete"
+          />
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn 
+            @click="verifyOtp"
+            id="loginBtn"
+            width="50%"
+            class="white--text" 
+            color="blue"
+            :loading="loading"
+            >Submit</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-form>
   </div>
 </template>
 
@@ -57,10 +59,8 @@ import '../assets/App.css'
         }
         this.loading = true
         this.OTPVerify({otp:this.otp}) .then(() => {
-          //console.log("inside res........")
           router.push('/dashBoard');
         }).catch(() => {
-          //console.log('ERROR OCCURED',err);
           this.loading = false
           alert("OTP code is not valid !")
         }) 

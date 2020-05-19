@@ -67,7 +67,9 @@ import {mapActions} from 'vuex';
           { icon:'mdi-settings', text:'Global Settings',
           route:'/dashBoard/globalSettings'},
           { icon:'mdi-tooltip-text', text:'App Feedback',
-          route:'/dashBoard/appFeedback'}
+          route:'/dashBoard/appFeedback'},
+          { icon:'mdi-tooltip-text', text:'Change Password',
+          route:'/dashBoard/changePassword'}
         ]
       }
     },

@@ -132,28 +132,45 @@ export default {
       'paymentGatewayBills',
       'paymentGatewaySlip',
     ]),
+
     searchFunc () {
       this.searchOwner(this.searchOwnerName)
     },
+
     addOwnerFunc () {
       this.showAddDialog.push(1)
     },
+
     paymentGateway (item) {
-      this.currentOwner = {}
-      this.showPaymentDialog.push(1)
-      this.currentOwner = item
+      this.getOwners().then(() =>{
+        this.owners = [...this.ownersList]
+        let obj = {}
+        for(let data of this.owners){
+          if(item.id === data.id){
+            obj = data
+          }
+        }
+        this.currentOwner = {}
+        this.currentOwner = obj
+        this.showPaymentDialog.push(1)
+      }).catch(err => {
+        console.log("err : ",err)
+      })
     },
+
     suspendCurrentOwner (item) {
       this.currentOwner = {}
-      this.showSuspendDialog.push(1)
       this.currentOwner = item
+      this.showSuspendDialog.push(1)
     }
   },
+
   computed: {
     ...mapState([
       'ownersList'
     ]),
   },
+  
   watch:{
     ownersList() {
       this.owners = [...this.ownersList]

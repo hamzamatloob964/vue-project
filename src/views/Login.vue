@@ -82,7 +82,7 @@ Vue.use(Vuelidate)
         }).catch(() => {
           //console.log('ERROR OCCURED',err);
           this.loading = false
-          alert("Email or password is incorrect !")
+          alert("username or password is incorrect !")
         }) 
       }
     },
@@ -91,7 +91,7 @@ Vue.use(Vuelidate)
         var field = this.$v.user.username;
         let error = [];
         if(!field.$dirty) return error;
-        !field.required && error.push('UserName is required!')
+        !field.required && error.push('Username is required!')
         return error;
       },
       passwordErrors() {

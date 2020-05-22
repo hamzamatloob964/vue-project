@@ -4,6 +4,8 @@
       v-model="drawer"
       app
     >
+      <h1 class="pa-4 grey--text text--darken-3">Welcome Admin</h1>
+
       <v-list dense >
         <v-list-item v-for="link in E_links" 
         :key="link.text" router :to="link.route" active-class="secondary--text">

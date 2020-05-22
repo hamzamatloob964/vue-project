@@ -4,15 +4,12 @@
       <Breadcrumb class="breadcrumb"/>
     </div>
     <div class="justify-center changePass">
-      <v-alert type="error" dense dismissible max-width="500" v-model="isAlertTrue">
-        <!-- <span v-if="isNewPass">password and Confirm password didn't match !</span> <br>
-        <span v-if="isCurrentPass">Invalid current password !</span>  -->
-        <div v-if="isNewPass">password and Confirm password didn't match !</div>
-        <div v-if="isCurrentPass">Invalid current password !</div> 
+      <v-alert type="error" dense dismissible max-width="500" v-model="showErrorAlert">
+        <div>Invalid current password!</div> 
       </v-alert>
-      <!-- <v-alert type="error" dense dismissible max-width="500" v-model="isCurrentPass">
-        Invalid current password !
-      </v-alert> -->
+      <v-alert type="success" dense dismissible max-width="500" v-model="showSuccessAlert">
+        password changed successfully
+      </v-alert>
 
       <v-form
         ref="form"
@@ -63,13 +60,13 @@
 </template>
 
 <script>
-var Cookies = require('vue-cookies')
 import Breadcrumb from '../components/Breadcrumb'
 import {mapActions} from 'vuex';
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength, sameAs } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import '../assets/App.css'
+import {post} from '../services/RestService'
 
 Vue.use(Vuelidate)
   export default {
@@ -82,17 +79,15 @@ Vue.use(Vuelidate)
         user:{ currentpassword:'',newpassword:'',confirmpassword:'' },
         errors: null,
         loading: false,
-        isAlertTrue: false,
-        isNewPass: false,
-        isCurrentPass: false
-
+        showErrorAlert: false,
+        showSuccessAlert: false
       }
     },
     validations: {
       user: {
           currentpassword: { required },
-          newpassword: { required, minLength: minLength(8) },
-          confirmpassword: { required, minLength: minLength(8) }
+          newpassword: { required, minLength: minLength(6) },
+          confirmpassword: { required, minLength: minLength(6), sameAs: sameAs('newpassword') }
       }
     },
     methods: {
@@ -107,35 +102,26 @@ Vue.use(Vuelidate)
         else {
           if (this.user.newpassword !== this.user.confirmpassword){
             console.log("if cond....")
-            this.isAlertTrue = true
-            this.isNewPass = true
+            this.showErrorAlert = true
           } else{
             if(this.isCurrentPass == false ){
-              console.log("if new pass cond....")
-              this.isAlertTrue = false
-              this.isNewPass = false
+              this.showErrorAlert = false
             }
-            this.isNewPass = false
           }
 
-          this.login({username:Cookies.get('user'), password:this.user.currentpassword})
+        this.loading = true;
+        post('change-password', {password:this.user.currentpassword, newPassword: this.user.newpassword})
           .then(() => {
-            if(this.isNewPass == false ){
-              console.log("if curren pass cond....")
-              this.isAlertTrue = false
-              this.isCurrentPass = false
-            }
-            this.isCurrentPass = false
-            //this.$router.push('/OTPVerify');
-          }).catch(() => {
-          
-            this.loading = false
-            //alert("Email or password is incorrect !")
-            this.isAlertTrue = true
-            this.isCurrentPass = true
+            this.showErrorAlert = false
+            this.showSuccessAlert = true;
+          })
+          .catch(() => {
+            this.showSuccessAlert = false;
+            this.showErrorAlert = true;
           }) 
-          this.loading = true
-          //this.$router.push('/OTPVerify');
+          .finally(() => {
+            this.loading = false;
+          })
         }
         
       }
@@ -146,23 +132,24 @@ Vue.use(Vuelidate)
         var field = this.$v.user.currentpassword;
         let error = [];
         if(!field.$dirty) return error;
-        !field.required && error.push('Current Password is required!')
+        !field.required && error.push('required')
         return error;
       },
       newPasswordErrors() {
         var field = this.$v.user.newpassword;
         let error = [];
         if(!field.$dirty) return error;
-        !field.required && error.push('Password is required!')
-        !field.minLength && error.push('Password length is atmost 8 characters long!')
+        !field.required && error.push('required')
+        !field.minLength && error.push('should be at least 6 characters')
         return error;
       },
       confirmPasswordErrors() {
         var field = this.$v.user.confirmpassword;
         let error = [];
         if(!field.$dirty) return error;
-        !field.required && error.push('Confirm Password is required!')
-        !field.minLength && error.push('Confirm Password length is atmost 8 characters long!')
+        !field.required && error.push('required')
+        !field.minLength && error.push('should be at least 6 characters')
+        !field.sameAs && error.push('Password does not match')
         return error;
       }
     },

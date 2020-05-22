@@ -53,7 +53,7 @@
          this.registrations = item.status
        }
        if(item.type == 'billplz'){
-         console.log("bilplz....",item.status)
+        //  console.log("bilplz....",item.status)
          this.bills = item.status
        }
        if(item.type == 'bankslip'){
@@ -79,7 +79,7 @@
       this.paymentGatewaySlip({ownerId:this.owner.id,configs:{bankslip: this.slip}});
     },
     paymentGatewayBillsFunc () {
-      console.log({ownerId:this.owner.id,configs:{billplz: this.bills}})
+      // console.log({ownerId:this.owner.id,configs:{billplz: this.bills}})
       this.paymentGatewayBills({ownerId:this.owner.id,configs:{billplz: this.bills}});
     },
     paymentGatewayStripeFunc () {

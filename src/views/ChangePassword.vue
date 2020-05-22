@@ -101,7 +101,6 @@ Vue.use(Vuelidate)
         }
         else {
           if (this.user.newpassword !== this.user.confirmpassword){
-            console.log("if cond....")
             this.showErrorAlert = true
           } else{
             if(this.isCurrentPass == false ){

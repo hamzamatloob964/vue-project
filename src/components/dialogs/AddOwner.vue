@@ -48,7 +48,7 @@
            this.success = true
          }).catch(err => {
            this.error = true
-           console.log("error adding owner :",err)
+           <!-- console.log("error adding owner :",err) -->
          })
        }else{
          this.error = true

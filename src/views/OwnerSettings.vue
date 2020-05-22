@@ -118,8 +118,7 @@ export default {
     this.showSuspendDialog = []
     this.getOwners().then(() =>{
       this.owners = [...this.ownersList]
-    }).catch(err => {
-      console.log("err : ",err)
+    }).catch(() => {
     })
   },
   methods: {
@@ -153,8 +152,7 @@ export default {
         this.currentOwner = {}
         this.currentOwner = obj
         this.showPaymentDialog.push(1)
-      }).catch(err => {
-        console.log("err : ",err)
+      }).catch(() => {
       })
     },
 

@@ -24,7 +24,7 @@
         </v-card>
       </v-dialog>
    </div>
- </template>
+</template>
  
  <script>
  import {mapActions} from 'vuex';
@@ -46,9 +46,9 @@
        if(this.ownerPNumber){
          this.addOwner({phoneno:this.ownerPNumber}).then(() => {
            this.success = true
-         }).catch(err => {
+         }).catch(() => {
            this.error = true
-           <!-- console.log("error adding owner :",err) -->
+          //  console.log("error adding owner :",err)
          })
        }else{
          this.error = true

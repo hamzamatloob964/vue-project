@@ -6,10 +6,11 @@
         <v-text-field
         class="mt-5 mx-4"
         flat
-        v-model="searchOwnerName"
+        v-model="search"
         label="Search"
         append-icon="mdi-magnify"
-        @click:append = "searchFunc"
+        @click:append="searchFunc"
+        @keypress.enter="searchFunc"
         solo-inverted
         clearable
         ></v-text-field>
@@ -25,7 +26,7 @@
     <div class="card-main pl-5 pr-5">
       <v-data-table
         :headers="headers"
-        :items="owners"
+        :items="filteredOwners"
         sort-by="calories"
         class="elevation-1"
       >
@@ -64,7 +65,7 @@ export default {
   data () {
     return {
       ownerPNumber:'',
-      searchOwnerName:'',
+      search:'',
       arry :[1,2,3,4,5],
       showAddDialog: [],
       showPaymentDialog: [],
@@ -103,6 +104,7 @@ export default {
         { text: 'Actions', value: 'action', sortable: false, align: 'right', },
       ],
       owners: [],
+      filteredOwners: [],
       currentOwner:{}
     }
   },
@@ -118,6 +120,7 @@ export default {
     this.showSuspendDialog = []
     this.getOwners().then(() =>{
       this.owners = [...this.ownersList]
+      this.filteredOwners = [...this.ownersList]
     }).catch(() => {
     })
   },
@@ -133,7 +136,9 @@ export default {
     ]),
 
     searchFunc () {
-      this.searchOwner(this.searchOwnerName)
+      this.filteredOwners = [...this.owners.filter(item => 
+        item.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1
+      )]
     },
 
     addOwnerFunc () {

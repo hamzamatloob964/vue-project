@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -29,17 +29,24 @@
     </v-navigation-drawer>
 
     <v-app-bar
-      app
       color="#0082ca"
+      app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="white--text">
       </v-app-bar-nav-icon>
       <v-toolbar-title class="white--text">8Rent Admin</v-toolbar-title>
     </v-app-bar>
 
-    <v-content>
-      <router-view></router-view>
-    </v-content>
+    <v-main style="max-height: 100vh; overflow: auto">
+      <v-container class="pb-10" fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+    <!-- <v-content>
+      <div class="py-5" style="border: 2px solid red">
+        <router-view></router-view>
+      </div>
+    </v-content> -->
 
     <v-footer
       color="#0082ca"
@@ -47,7 +54,7 @@
     >
       <span class="white--text">&copy; 2019</span>
     </v-footer>
-  </div>
+  </v-app>
 </template>
 
 <script>

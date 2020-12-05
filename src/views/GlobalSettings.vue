@@ -5,7 +5,7 @@
     </div>
     <div class="div-content">
       <div class="tenant-account pl-5 pr-5">
-        <h3>Disable Account </h3>
+        <h3>Account Setups</h3>
         <v-switch v-model="tenanatAccount" color="indigo"
           :label="`${tenanatAccount? 'Disable': 'Enable'} tenant account setup`" @change="tenantAccountFunc">
         </v-switch>
@@ -188,7 +188,7 @@ export default {
       this.globalTenantAccount({registrations:{tenant:this.tenanatAccount}});
     },
     ownerAccountFunc () {
-      this.globalOwnerAccount({registrations:{tenant:this.ownerAccount}});
+      this.globalOwnerAccount({registrations:{owner:this.ownerAccount}});
     },
 
     addBank () {

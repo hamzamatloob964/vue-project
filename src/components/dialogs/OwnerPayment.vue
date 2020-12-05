@@ -5,9 +5,9 @@
       <v-card-text>
         <br>
         <div>
-          <v-switch v-model="registrations" color="indigo" class="mx-2" 
+          <!-- <v-switch v-model="registrations" color="indigo" class="mx-2" 
           label="Tenant Registrations" @change="paymentGatewayRegistrationsFunc">
-          </v-switch>
+          </v-switch> -->
           <v-switch v-model="slip" color="indigo" class="mx-2" 
           label="Bank slip upload" @change="paymentGatewaySlipFunc">
           </v-switch>

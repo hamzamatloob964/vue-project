@@ -42,14 +42,16 @@
             small
             @click="suspendCurrentOwner(item)"
           >
-            mdi-account-remove
+            {{item.status === 'suspended' ? 'mdi-account': 'mdi-account-remove'}}
           </v-icon>
         </template>
       </v-data-table>
     </div>
     <AddOwner v-for="(item,i) in showAddDialog" :key="'add'+i"/>
-    <OwnerPayment :owner="currentOwner" v-for="(item,i) in showPaymentDialog" :key="'pay'+i"/>
-    <SuspendOwner :owner="currentOwner" v-for="(item,i) in showSuspendDialog" :key="'susp'+i"/>
+    <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
+      <OwnerPayment v-if="dType === 'payment'" :owner="currentOwner" @finish="dialog = false"/>
+      <SuspendOwner v-else-if="dType === 'suspend'" :owner="currentOwner" @finish="dialog = false" />
+    </v-dialog>
   </div>
 </template>
 
@@ -105,7 +107,9 @@ export default {
       ],
       owners: [],
       filteredOwners: [],
-      currentOwner:{}
+      currentOwner: null,
+      dialog: false,
+      dType: 'payment'
     }
   },
   components: {
@@ -154,17 +158,19 @@ export default {
             obj = data
           }
         }
-        this.currentOwner = {}
-        this.currentOwner = obj
+        this.currentOwner = {...obj}
         this.showPaymentDialog.push(1)
+        this.dType = 'payment';
+        this.dialog = true;
       }).catch(() => {
       })
     },
 
     suspendCurrentOwner (item) {
-      this.currentOwner = {}
-      this.currentOwner = item
+      this.currentOwner = {...item}
       this.showSuspendDialog.push(1)
+      this.dType = 'suspend';
+      this.dialog = true;
     }
   },
 
@@ -177,6 +183,10 @@ export default {
   watch:{
     ownersList() {
       this.owners = [...this.ownersList]
+      this.searchFunc();
+    },
+    'dialog': function(val) {
+      if(!val) this.dType = null;
     }
   }
 }

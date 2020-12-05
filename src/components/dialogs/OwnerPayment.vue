@@ -1,34 +1,32 @@
 <template>
   <div>
-    <v-dialog v-model="dialog"  transition="dialog-bottom-transition" width="40%">
-      <v-card>
-        <v-card-title ><span class="headline blue--text">Owner Configurations</span></v-card-title>
-        <v-card-text>
-          <br>
-          <div>
-            <v-switch v-model="registrations" color="indigo" class="mx-2" 
-            label="Tenant Registrations" @change="paymentGatewayRegistrationsFunc">
-            </v-switch>
-            <v-switch v-model="slip" color="indigo" class="mx-2" 
-            label="Bank slip upload" @change="paymentGatewaySlipFunc">
-            </v-switch>
-            <v-switch v-model="bills" color="indigo" class="mx-2" 
-            label="Billplz" @change="paymentGatewayBillsFunc">
-            </v-switch>
-            <v-switch v-model="stripe" color="indigo" class="mx-2" 
-            label="Stripe" @change="paymentGatewayStripeFunc">
-            </v-switch>
-            <v-switch v-model="paypal" color="indigo" class="mx-2" 
-            label="Paypal" @change="paymentGatewayPaypalFunc">
-            </v-switch>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn class="marginLeft" color="blue darken-1" text @click.native="dialog = false" >
-            close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <v-card>
+      <v-card-title ><span class="headline blue--text">Owner Configurations</span></v-card-title>
+      <v-card-text>
+        <br>
+        <div>
+          <v-switch v-model="registrations" color="indigo" class="mx-2" 
+          label="Tenant Registrations" @change="paymentGatewayRegistrationsFunc">
+          </v-switch>
+          <v-switch v-model="slip" color="indigo" class="mx-2" 
+          label="Bank slip upload" @change="paymentGatewaySlipFunc">
+          </v-switch>
+          <v-switch v-model="bills" color="indigo" class="mx-2" 
+          label="Billplz" @change="paymentGatewayBillsFunc">
+          </v-switch>
+          <v-switch v-model="stripe" color="indigo" class="mx-2" 
+          label="Stripe" @change="paymentGatewayStripeFunc">
+          </v-switch>
+          <v-switch v-model="paypal" color="indigo" class="mx-2" 
+          label="Paypal" @change="paymentGatewayPaypalFunc">
+          </v-switch>
+        </div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn class="marginLeft" color="blue darken-1" text @click.native="$emit('finish')" >
+          close</v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
  
@@ -39,7 +37,6 @@
    props: ['owner'],
    data () {
      return {
-      dialog: true,
       registrations: true,
       paypal: true,
       slip: true,
@@ -48,7 +45,18 @@
      }
    },
    mounted () {
-     for(let item of this.owner.configs){
+     this.initConfigs();
+   },
+   methods: {
+    ...mapActions([
+      'paymentGatewayPaypal',
+      'paymentGatewayRegistration',
+      'paymentGatewayStripe',
+      'paymentGatewayBills',
+      'paymentGatewaySlip'
+    ]),
+    initConfigs() {
+      for(let item of this.owner.configs){
        if(item.type == 'registrations'){
          this.registrations = item.status
        }
@@ -66,15 +74,7 @@
          this.stripe = item.status
        }
      }
-   },
-   methods: {
-    ...mapActions([
-      'paymentGatewayPaypal',
-      'paymentGatewayRegistration',
-      'paymentGatewayStripe',
-      'paymentGatewayBills',
-      'paymentGatewaySlip'
-    ]),
+    },
     paymentGatewaySlipFunc () {
       this.paymentGatewaySlip({ownerId:this.owner.id,configs:{bankslip: this.slip}});
     },
@@ -92,6 +92,12 @@
       this.paymentGatewayPaypal ({ownerId:this.owner.id,configs:{paypal: this.paypal}})
     }
    },
+   watch: {
+     'owner': function() {
+       console.log('here')
+       this.initConfigs()
+     }
+   }
  }
  </script>
  

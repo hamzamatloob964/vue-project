@@ -19,7 +19,7 @@
             <tr v-for="(item,i) in items" :key="i" @click="selectItem(item)">
               <td>{{ item.name }}</td>
               <td>{{ item.phoneno }}</td>
-              <td>{{ item.message }}</td>
+              <td>{{ item.title }}</td>
               <!-- <td>{{ item.age }}</td> -->
             </tr>
           </tbody>
@@ -76,10 +76,10 @@ data () {
         value: 'phoneno',
       },
       {
-        text: 'Feedback',
+        text: 'Title',
         align: 'left',
         sortable: false,
-        value: 'message',
+        value: 'title',
       }
     ],
   }

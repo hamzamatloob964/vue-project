@@ -5,12 +5,12 @@
     </div>
     <div class="div-content">
       <div class="tenant-account pl-5 pr-5">
-        <h3>Account Setups</h3>
+        <h3>Enable (tenant/owner) account setup</h3>
         <v-switch v-model="tenanatAccount" color="indigo"
-          :label="`${tenanatAccount? 'Disable': 'Enable'} tenant account setup`" @change="tenantAccountFunc">
+          label="Tenant account setup" @change="tenantAccountFunc">
         </v-switch>
         <v-switch v-model="ownerAccount" color="indigo"
-          :label="`${ownerAccount? 'Disable': 'Enable'} owner account setup`" @change="ownerAccountFunc">
+          label="Owner account setup" @change="ownerAccountFunc">
         </v-switch>
       </div>
       <div class="payment-gateway pl-5 pr-5">

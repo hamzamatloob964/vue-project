@@ -10,7 +10,7 @@
   "dependencies": {
     "@bachdgvn/vue-otp-input": "^1.0.8",
     "@mdi/font": "^4.9.95",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "connect-history-api-fallback": "^1.6.0",
     "cookies": "^0.8.0",
     "core-js": "^3.8.0",

@@ -1,6 +1,7 @@
 import axios from 'axios';
-const BASE_URL = 'http://13.125.249.92:9000/api/v1/app-mgt/'
+// const BASE_URL = 'http://13.125.249.92:9000/api/v1/app-mgt/'
 //const BASE_URL = 'http://10.0.0.179:9000/api/v1/app-mgt/'
+const BASE_URL = 'https://api.8rent.io/api/v1/app-mgt/'
 var Cookies = require('vue-cookies')
 
 const get = (url, options = {}) => {

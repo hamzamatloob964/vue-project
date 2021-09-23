@@ -94,7 +94,6 @@
    },
    watch: {
      'owner': function() {
-       console.log('here')
        this.initConfigs()
      }
    }

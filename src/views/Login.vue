@@ -74,7 +74,7 @@ Vue.use(Vuelidate)
           return;
         }
         this.loading = true
-        console.log("user obj :",this.user)
+        // console.log("user obj :",this.user)
         this.login(this.user).then(() => {
           //console.log("login res data:",res)
           Cookies.set('user',this.user.username)

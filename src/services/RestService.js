@@ -59,7 +59,7 @@ const put = (url, payload, options = {}) => {
         reject();
       }
     }).catch(error => {
-      console.log('ERROR>>>', error.response);
+      // console.log('ERROR>>>', error.response);
       reject(error);
     })
   })
@@ -78,7 +78,7 @@ const del = (url, options) => {
         reject();
       }
     }).catch(error => {
-      console.log('ERROR>>>', error.response);
+      // console.log('ERROR>>>', error.response);
       reject(error);
     })
   })
